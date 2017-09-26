@@ -84,9 +84,7 @@ class App extends Component {
                 />
                 }
                 <div className="interactions">
-                    <Button
-                        onClick={() => this.fetchSearchTopstories(searchTerm, page +1)}
-                    >
+                    <Button onClick={() => this.fetchSearchTopstories(searchTerm, page + 1)}>
                         More {page}
                     </Button>
                 </div>
@@ -158,5 +156,5 @@ const Button = ({onClick, children, className = ''}) => {
     )
 }
 
-export {PARAM_PAGE, PARAM_SEARCH};
+
 export default App;
