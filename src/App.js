@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 // import Div from './Div';
 import './App.css';
 
@@ -28,6 +28,7 @@ class App extends Component {
             results: null,
             searchKey: '',
             searchTerm: DEFAULT_QUERY,
+            isLoading: false,
         }
 
     }
@@ -48,7 +49,8 @@ class App extends Component {
             results: {
                 ...results,
                 [searchKey]: { hits: updatedHits, page }
-            }
+            },
+            isLoading: false
         })
     }
 
@@ -59,6 +61,9 @@ class App extends Component {
 
 
     fetchSearchTopstories = (searchTerm, page) => {
+        this.setState({
+            isLoading: true
+        });
         fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
             .then(response => response.json())
             .then(result => this.setSearchTopstories(result));
@@ -93,7 +98,7 @@ class App extends Component {
 
         this.setState({
             results: {
-                ...result,
+                ...results,
                 [searchKey]: { hits: updatedHits, page }
             }
         })
@@ -104,6 +109,7 @@ class App extends Component {
             results,
             searchKey,
             searchTerm,
+            isLoading
         } = this.state;
 
         const page = (
@@ -136,19 +142,38 @@ class App extends Component {
                 />
                 }
                 <div className="interactions">
-                    <Button
-                        onClick={() => this.fetchSearchTopstories(searchKey, page +1)}
+                    <ButtonWithLoading
+                        onClick={ () => this.fetchSearchTopstories(searchKey, page +1) }
+                        isLoading={isLoading}
                     >
                         More {page}
-                    </Button>
+                    </ButtonWithLoading>
+                    {/*{ isLoading*/}
+                        {/*? <Loading/>*/}
+                        {/*: <Button*/}
+                            {/*onClick={() => this.fetchSearchTopstories(searchKey, page +1)}*/}
+                        {/*>*/}
+                            {/*More {page}*/}
+                        {/*</Button>*/}
+                    {/*}*/}
+
                 </div>
             </div>
         );
     }
 }
 
+const withLoding = (Component) => ({ isLoading, ...rest }) =>
+    isLoading ? <Loading /> : <Component {...rest} />
+
+
+
+const Loading = () =>
+    <div>Loading ...</div>
+
 const Search = ({value, onChange, onSubmit, children}) => {
     return (
+
         <form onSubmit={onSubmit}>
             {children}
             <input
@@ -164,6 +189,7 @@ const Search = ({value, onChange, onSubmit, children}) => {
         </form>
     )
 }
+
 
 
 const Table = ({ list, onDismiss}) =>
@@ -209,6 +235,8 @@ const Button = ({onClick, children, className = ''}) => {
         </button>
     )
 }
+
+const ButtonWithLoading = withLoding(Button);
 
 export {PARAM_PAGE, PARAM_SEARCH};
 export default App;
