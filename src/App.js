@@ -143,10 +143,10 @@ class App extends Component {
                 }
                 <div className="interactions">
                     <ButtonWithLoading
-                        onClick={ () => this.fetchSearchTopstories(searchKey, page +1) }
+                        onClick={() => this.fetchSearchTopstories(searchKey, page +1)}
                         isLoading={isLoading}
                     >
-                        More {page}
+                        More Ziom{page}
                     </ButtonWithLoading>
                     {/*{ isLoading*/}
                         {/*? <Loading/>*/}
@@ -163,8 +163,10 @@ class App extends Component {
     }
 }
 
-const withLoding = (Component) => ({ isLoading, ...rest }) =>
-    isLoading ? <Loading /> : <Component {...rest} />
+const withLoading = (Component) => ({isLoading, ...rest}) => {
+    console.log('isLoading', isLoading)
+    return isLoading ? <Loading /> : <Component {...rest}/>
+}
 
 
 
@@ -236,7 +238,7 @@ const Button = ({onClick, children, className = ''}) => {
     )
 }
 
-const ButtonWithLoading = withLoding(Button);
+const ButtonWithLoading = withLoading(Button);
 
 export {PARAM_PAGE, PARAM_SEARCH};
 export default App;
